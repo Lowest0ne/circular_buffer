@@ -3,7 +3,7 @@ OBJD := obj
 BIND := bin
 
 CC = gcc
-CFLAGS =
+CFLAGS = 
 VPATH = src
 
 OBJS := $(patsubst $(SRCD)/%.c,$(OBJD)/%.o,$(wildcard $(SRCD)/*.c))
@@ -12,7 +12,7 @@ EXEC = $(BIND)/prog
 all: $(OBJD) $(BIND) | $(EXEC)
 
 $(EXEC): $(OBJS)
-	$(CC) -o $@ $^ $(LDFLAGS)
+	$(CC) -o $@ $^
 
 $(OBJD)/main.o: main.c circular_buffer.h
 	$(CC) $(CFLAGS) -c $< -o $@
