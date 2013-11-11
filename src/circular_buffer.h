@@ -25,8 +25,4 @@ void buffer_add( buffer*, const char* );
 // In order that one would expect from a circular buffer
 void buffer_perform( buffer, void(*)(const char*) );
 
-// Return the element that was placed last on the buffer
-// Seems like a good thing to have :)
-char* buffer_current( buffer );
-
 #endif
