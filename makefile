@@ -14,7 +14,10 @@ all: $(OBJD) $(BIND) | $(EXEC)
 $(EXEC): $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-$(OBJD)/main.o: main.c
+$(OBJD)/main.o: main.c circular_buffer.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJD)/circular_buffer.o: circular_buffer.c circular_buffer.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJD):
