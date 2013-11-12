@@ -6,16 +6,26 @@
  ******************************************************************************/
 circle_buffer circle_buffer_init( const size_t size )
 {
+  if ( size == 0 ) return NULL;
+
   circle_buffer bf = malloc ( sizeof( struct circle_node ) );
+  if ( !bf ) return NULL;
 
   // allocate memory and intialize contents of struct
   bf->begin = malloc( size * sizeof( char* ) );
+  if ( !bf->begin )
+  {
+    free ( bf );
+    return NULL;
+  }
+
   bf->current = bf->begin;
   bf->end = bf->begin + size;
 
   // set all char* to NULL
-  size_t i;
-  for ( i = 0; i < size; ++i ) *(bf->begin + i) = NULL;
+  char **pointer = bf->begin;
+  while ( pointer < bf->end )
+    *pointer++ = NULL;
 
   return bf;
 }
@@ -29,9 +39,9 @@ void circle_buffer_destroy( circle_buffer bf )
   assert( bf->end > bf->begin );
 
   // free each char*
-  char** current = NULL;
-  for ( current = bf->begin; current < bf->end; ++current )
-    free( *(current) );
+  char** current = bf->begin;
+  while ( current < bf->end )
+    free ( *current++ );
 
   // free the buffer
   free( bf->begin );
@@ -53,13 +63,11 @@ void circle_buffer_add( circle_buffer bf, const char* str)
   }
 
   // allocate space and copy string into buffer
-  size_t length = strlen( str );
-  *(bf->current) = malloc( length + 1 );
+  *(bf->current) = malloc( strlen( str ) + 1 );
   strcpy( *(bf->current), str );
 
   // increment the current pointer
-  ++bf->current;
-  if ( bf->current == bf->end ) bf->current = bf->begin;
+  if ( ++bf->current == bf->end ) bf->current = bf->begin;
 
 }
 /*******************************************************************************
@@ -69,6 +77,8 @@ void circle_buffer_add( circle_buffer bf, const char* str)
  ******************************************************************************/
 void circle_buffer_perform( circle_buffer bf, void(*func)(const char*) )
 {
+  assert ( bf->begin <= bf->current && bf->current < bf->end );
+
   char **pointer = NULL;
 
   if ( *(bf->current) )            // if the current pointer exists
@@ -83,9 +93,3 @@ void circle_buffer_perform( circle_buffer bf, void(*func)(const char*) )
     func( *pointer++ );
 
 }
-
-
-
-
-
-

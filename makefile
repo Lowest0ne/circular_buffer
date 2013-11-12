@@ -9,6 +9,11 @@ VPATH = src
 OBJS := $(patsubst $(SRCD)/%.c,$(OBJD)/%.o,$(wildcard $(SRCD)/*.c))
 EXEC = $(BIND)/prog
 
+release: CFLAGS += -DNDEBUG
+release: all
+
+debug: all
+
 all: $(OBJD) $(BIND) | $(EXEC)
 
 $(EXEC): $(OBJS)
