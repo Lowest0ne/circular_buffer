@@ -3,7 +3,7 @@ OBJD := obj
 BIND := bin
 
 CC = gcc
-CFLAGS = 
+CFLAGS = -Wall -Wextra
 VPATH = src
 
 OBJS := $(patsubst $(SRCD)/%.c,$(OBJD)/%.o,$(wildcard $(SRCD)/*.c))
