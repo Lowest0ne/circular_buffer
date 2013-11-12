@@ -4,18 +4,18 @@
  *
  * initialize and return an empty buffer
  ******************************************************************************/
-buffer buffer_init( const size_t size )
+circle_buffer circle_buffer_init( const size_t size )
 {
-  buffer bf;
+  circle_buffer bf = malloc ( sizeof( struct circle_node ) );
 
   // allocate memory and intialize contents of struct
-  bf.begin = malloc( size * sizeof( char* ) );
-  bf.current = bf.begin;
-  bf.end = bf.begin + size;
+  bf->begin = malloc( size * sizeof( char* ) );
+  bf->current = bf->begin;
+  bf->end = bf->begin + size;
 
   // set all char* to NULL
   size_t i;
-  for ( i = 0; i < size; ++i ) *(bf.begin + i) = NULL;
+  for ( i = 0; i < size; ++i ) *(bf->begin + i) = NULL;
 
   return bf;
 }
@@ -24,24 +24,25 @@ buffer buffer_init( const size_t size )
  *
  * free memory allocated from buffer
  ******************************************************************************/
-void buffer_destroy( buffer bf )
+void circle_buffer_destroy( circle_buffer bf )
 {
-  assert( bf.end > bf.begin );
+  assert( bf->end > bf->begin );
 
   // free each char*
   char** current = NULL;
-  for ( current = bf.begin; current < bf.end; ++current )
+  for ( current = bf->begin; current < bf->end; ++current )
     free( *(current) );
 
   // free the buffer
-  free( bf.begin );
+  free( bf->begin );
+  free( bf );
 }
 /*******************************************************************************
  * void buffer_add( buffer, const char* )
  *
  * add a string to the buffer
  ******************************************************************************/
-void buffer_add( buffer* bf, const char* str)
+void circle_buffer_add( circle_buffer bf, const char* str)
 {
 
   // free the memory for the new element to use
@@ -66,19 +67,19 @@ void buffer_add( buffer* bf, const char* str)
  *
  * call the passed in method once per item
  ******************************************************************************/
-void buffer_perform( buffer bf, void(*func)(const char*) )
+void circle_buffer_perform( circle_buffer bf, void(*func)(const char*) )
 {
   char **pointer = NULL;
 
-  if ( *(bf.current) )               // if the current pointer exists
-  {                                  // the buffer has been filled
-    pointer = bf.current;            // set pointer to current
-    while ( pointer != bf.end )
-      func( *pointer++ );            // call func and incriment until end
+  if ( *(bf->current) )            // if the current pointer exists
+  {                                // the buffer has been filled
+    pointer = bf->current;         // set pointer to current
+    while ( pointer != bf->end )
+      func( *pointer++ );          // call func and incriment until end
   }
 
-  pointer = bf.begin;                // set the pointer to the begin
-  while ( pointer != bf.current )    // call func and incriment until current
+  pointer = bf->begin;             // set the pointer to the begin
+  while ( pointer != bf->current ) // call func and incriment until current
     func( *pointer++ );
 
 }
