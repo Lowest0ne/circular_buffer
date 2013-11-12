@@ -8,7 +8,7 @@ void my_function( const char* str )
 }
 
 
-int main( int arc, char *argv[] )
+int main( void )
 {
   // initialize a buffer of size 10
   buffer bf = buffer_init( 10 );

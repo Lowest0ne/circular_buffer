@@ -26,10 +26,12 @@ buffer buffer_init( const size_t size )
  ******************************************************************************/
 void buffer_destroy( buffer bf )
 {
+  assert( bf.end > bf.begin );
+
   // free each char*
-  size_t i;
-  for ( i = 0; i < bf.end - bf.begin; ++i )
-    free( *(bf.begin + i ) );
+  char** current = NULL;
+  for ( current = bf.begin; current < bf.end; ++current )
+    free( *(current) );
 
   // free the buffer
   free( bf.begin );

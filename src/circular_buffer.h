@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 // The buffer is implemented as an array of char*
 // a user of the buffer should not alter the contents of the struct directly
