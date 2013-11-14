@@ -5,13 +5,8 @@
 #include <string.h>
 #include <assert.h>
 
-// The buffer is implemented as an array of char*
-// a user of the buffer should not alter the contents of the struct directly
-typedef struct circle_node {
-  char**   begin;
-  char** current;
-  char**     end;
-} *circle_buffer;
+// Declare the circular buffer
+typedef struct circle_node *circle_buffer;
 
 // Initialize the buffer to the desired size
 circle_buffer circle_buffer_init( const size_t size );
